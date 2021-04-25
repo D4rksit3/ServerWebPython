@@ -64,10 +64,10 @@ db = mysql.connector.connect(
     charset="utf8")
 cursor = db.cursor()
 
-#def reload():
-#    cursor.execute("select id,ip_equipo,ip_publico,ip_remoto,hostname,fecha from datos_maquina")
-#    for base in cursor:
-#        a = base
+def reload():
+    cursor.execute("select id,ip_equipo,ip_publico,ip_remoto,hostname,fecha from datos_maquina")
+    for base in cursor:
+        a = base
 
 
 
@@ -100,6 +100,10 @@ class requestHandler(BaseHTTPRequestHandler):
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
     <link href="favicon.ico" rel="shortcut icon">
+    <script>
+    
+    
+    </script>
     <title>Restablecer IPCC</title>
 </head>
 <body>'''
@@ -123,8 +127,26 @@ class requestHandler(BaseHTTPRequestHandler):
 <h3>Acciones a realizar:</h3>
 </br>'''
             
-            output += ''''<button type="submit"  value="Restablecer servicio ipcc">Restablecer servicio ipcc <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bar-chart-fill" viewBox="0 0 16 16">
+            output += '''<button type="submit" id="ipcc" value="Restablecer servicio ipcc">Restablecer servicio ipcc <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bar-chart-fill" viewBox="0 0 16 16">
   <path d="M1 11a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-3zm5-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1V2z"/>
+</svg></button>'''
+            output += '</br>'
+            output += '</br>'
+            output += '</form>'
+            
+            
+            output += '''<center><form method="POST" enctype="multipart/form-data" action="/tasklist/now"><p>Direccion IP a remotear: <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-circle-fill" viewBox="0 0 16 16">
+  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z"/>
+</svg></i></p>'''
+            
+            output += '<input name="now" type="text" placeholder="Ingresa direccion IP">'
+            output += '''</br>
+<h3>Acciones a realizar:</h3>
+</br>'''
+            
+            output += '''<button type="submit" id="down" value="Reiniciar PC">Reiniciar Computadora<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-power" viewBox="0 0 16 16">
+  <path d="M7.5 1v7h1V1h-1z"/>
+  <path d="M3 8.812a4.999 4.999 0 0 1 2.578-4.375l-.485-.874A6 6 0 1 0 11 3.616l-.501.865A5 5 0 1 1 3 8.812z"/>
 </svg></button>'''
             output += '</form></center>'
             output += '<html></body>'
@@ -159,7 +181,7 @@ class requestHandler(BaseHTTPRequestHandler):
             subprocess.run(f"pskill64.exe \\\\{a} -u administrador -p @C0l0n14l# -nobanner iexplore.exe ") and subprocess.run(f"pskill64.exe \\\\{a} -u administrador -p soporte@ -nobanner iexplore.exe ")
             #self.end_headers()
             
-            
+    
             if self.send_response(301):
                 self.send_header('content-type', 'text/html')
                 output = ''
@@ -183,14 +205,54 @@ class requestHandler(BaseHTTPRequestHandler):
             self.send_header('Location', '/tasklist/new')
 
             self.end_headers()
+            
+            
+        
+        if self.path.endswith('/now'):
+            ctype, pdict = cgi.parse_header(self.headers.get('content-type'))
+            
+            pdict['boundary'] = bytes(pdict['boundary'], "utf-8")
+            content_len = int(self.headers.get('Content-length'))
+            pdict['CONTENT-LENGTH'] = content_len
 
+            #if ctype == 'multipart/form-data':
+            fields = cgi.parse_multipart(self.rfile, pdict)
+            IP = fields.get('now')  
+            a = (''.join(IP))
+            
+            
+            sql = f"INSERT INTO datos_maquina(ip_equipo,ip_publico,ip_remoto,hostname,fecha) values('{ip_equipo}','{ip_publico}','{a}','{hostname}','{nowes}')"
+            cursor.execute(sql)
+            db.commit()
 
-
+            time.sleep(1)
+            subprocess.run(f"psshutdown.exe \\\\192.168.1.37 -u administrador  -p @C0l0n14l# -r ") and subprocess.run(f"psshutdown.exe \\\\192.168.1.37 -u administrador -p soporte@ -r ")
+            if self.send_response(301):
+                self.send_header('content-type', 'text/html')
+                output = ''
+                output += '''<!DOCTYPE html>
+                <html lang="en">
+                <head>
+                <meta charset="UTF-8">
+                <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+                <link href="favicon.ico" rel="shortcut icon">
+                <title>Restablecer IPCC</title>
+                </head>
+                <body>'''
+                output += '<div class="alert alert-success" role="alert">'
+                output += 'Operacion Exitosa!'
+                output += '</div>'
+                output += '</html></body>'
+                self.wfile.write(output.encode())
+            self.send_header('Location', '/tasklist/new')
+            self.end_headers()
 
 #Server Web        
 
 def main():
-    IP = "192.168.1.49"
+    IP = ip_equipo   
     PORT = 8888
     DireccionServer = (IP, PORT)
     server = HTTPServer(DireccionServer, requestHandler)
