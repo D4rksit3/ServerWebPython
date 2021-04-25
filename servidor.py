@@ -7,6 +7,7 @@ from datetime import date
 from datetime import datetime
 import urllib.request as urllib
 
+#
 
 
 #Fecha actual
@@ -123,9 +124,7 @@ class requestHandler(BaseHTTPRequestHandler):
 </svg></i></p>'''
             
             output += '<input name="task" type="text" placeholder="Ingresa direccion IP">'
-            output += '''</br>
-<h3>Acciones a realizar:</h3>
-</br>'''
+            #output += '''</br><h3>Acciones a realizar:</h3></br>'''
             
             output += '''<button type="submit" id="ipcc" value="Restablecer servicio ipcc">Restablecer servicio ipcc <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bar-chart-fill" viewBox="0 0 16 16">
   <path d="M1 11a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-3zm5-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1V2z"/>
@@ -140,9 +139,7 @@ class requestHandler(BaseHTTPRequestHandler):
 </svg></i></p>'''
             
             output += '<input name="now" type="text" placeholder="Ingresa direccion IP">'
-            output += '''</br>
-<h3>Acciones a realizar:</h3>
-</br>'''
+            #output += '''</br><h3>Acciones a realizar:</h3></br>'''
             
             output += '''<button type="submit" id="down" value="Reiniciar PC">Reiniciar Computadora<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-power" viewBox="0 0 16 16">
   <path d="M7.5 1v7h1V1h-1z"/>
@@ -177,8 +174,8 @@ class requestHandler(BaseHTTPRequestHandler):
             cursor.execute(sql)
             db.commit()
 
-            time.sleep(1)
-            subprocess.run(f"pskill64.exe \\\\{a} -u administrador -p @C0l0n14l# -nobanner iexplore.exe ") and subprocess.run(f"pskill64.exe \\\\{a} -u administrador -p soporte@ -nobanner iexplore.exe ")
+            
+            subprocess.run(f"start pskill64.exe \\\\{a} -u administrador -p @C0l0n14l# -nobanner iexplore.exe ", shell=True) and subprocess.run(f"start pskill64.exe \\\\{a} -u administrador -p soporte@ -nobanner iexplore.exe ",shell=True)
             #self.end_headers()
             
     
@@ -225,8 +222,8 @@ class requestHandler(BaseHTTPRequestHandler):
             cursor.execute(sql)
             db.commit()
 
-            time.sleep(1)
-            subprocess.run(f"psshutdown.exe \\\\192.168.1.37 -u administrador  -p @C0l0n14l# -r ") and subprocess.run(f"psshutdown.exe \\\\192.168.1.37 -u administrador -p soporte@ -r ")
+            
+            subprocess.run(f"start psshutdown.exe \\\\{a} -u administrador  -p @C0l0n14l# -r ",shell=True) and subprocess.run(f"start psshutdown.exe \\\\{a} -u administrador -p soporte@ -r ",shell=True)
             if self.send_response(301):
                 self.send_header('content-type', 'text/html')
                 output = ''
@@ -252,12 +249,20 @@ class requestHandler(BaseHTTPRequestHandler):
 #Server Web        
 
 def main():
-    IP = ip_equipo   
-    PORT = 8888
-    DireccionServer = (IP, PORT)
-    server = HTTPServer(DireccionServer, requestHandler)
-    print(f"Servidor corriendo en {IP} con el puerto {PORT}")
-    server.serve_forever()
+
+    a = 0
+    while True:
+        b = time.time()
+        if b - a > 2:
+
+            IP = ip_equipo   
+            PORT = 8888
+            DireccionServer = (IP, PORT)
+            server = HTTPServer(DireccionServer, requestHandler)
+    
+            print(f"Servidor corriendo en {IP} con el puerto {PORT}")
+            server.serve_forever()
 
 if __name__ == '__main__':
     main()
+   
