@@ -171,6 +171,7 @@ class requestHandler(BaseHTTPRequestHandler):
             self.send_header('Location', '/tasklist/new')
 
             self.end_headers()
+            
 
 
 #Server Web        
