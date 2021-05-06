@@ -1,4 +1,4 @@
-#_*_ coding : utf-8 _*_
+#* coding : utf-8 *
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import cgi
 import subprocess, os, time, socket
@@ -197,8 +197,13 @@ class requestHandler(BaseHTTPRequestHandler):
             output += '''
             <footer class="footer">
             <div>
-            <span>Copyright © MDY BPO 2021</span>
-            </div>
+            <span>Copyright © MDY 2021 Innovacion Tecnologica MG
+            <div align="right">
+             
+            Auspiciado por:
+            <a class="btn btn-outline-light" target="_blank" hf="https://www.facebook.com/El-Point-Chalaco-108072914697936/">
+            <img src="logo.jpg" width="65" height="65">
+            </a></div></div></span>
             </footer>
             
             '''
@@ -224,17 +229,24 @@ class requestHandler(BaseHTTPRequestHandler):
             fields = cgi.parse_multipart(self.rfile, pdict)
             IP = fields.get('task')  
             a = (''.join(IP))
-            
+            os.system("C:\\xampp\\mysql\\bin\\mysqld.exe")
             
             sql = f"INSERT INTO datos_maquina(ip_equipo,ip_publico,ip_remoto,hostname,fecha) values('{ip_equipo}','{ip_publico}','{a}','{hostname}','{nowes}')"
             cursor.execute(sql)
             db.commit()
 
+            #os.system("start PsExec -i -accepteula /nobanner")
+
+            subprocess.run(f"start pskill64.exe \\\\{a} -u administrador -p @C0l0n14l# -nobanner iexplore.exe", shell=True) and subprocess.run(f"start pskill64.exe \\\\{a} -u administrador -p soporte@ -nobanner iexplore.exe",shell=True)
+            #subprocess.run()
+            time.sleep(5)
+            os.system(f"start psexec.exe -i \\\\{a} -u administrador -p @C0l0n14l# -c start.bat") and os.system(f"start psexec.exe -i \\\\{a} -u administrador -p soporte@ -c start.bat")
             
-            subprocess.run(f"start pskill64.exe \\\\{a} -u administrador -p @C0l0n14l# -nobanner iexplore.exe ", shell=True) and subprocess.run(f"start pskill64.exe \\\\{a} -u administrador -p soporte@ -nobanner iexplore.exe ",shell=True)
             #self.end_headers()
             
-            time.sleep(3)
+            time.sleep(5)
+            #subprocess.run(f"start PsExec \\\\{a} -u administrador #-p @C0l0n14l# -nobanner cscript script.vbs", Shell=True)
+            #time.sleep(3)
             if self.send_response(301):
                 self.send_header('content-type', 'text/html')
                 output = ''
@@ -307,7 +319,7 @@ class requestHandler(BaseHTTPRequestHandler):
 #Server Web        
 
 def main():
-
+    os.system("cls")
     a = 0
     while True:
         b = time.time()
@@ -323,4 +335,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-   
