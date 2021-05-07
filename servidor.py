@@ -202,7 +202,7 @@ class requestHandler(BaseHTTPRequestHandler):
              
             Auspiciado por:
             <a class="btn btn-outline-light" target="_blank" hf="https://www.facebook.com/El-Point-Chalaco-108072914697936/">
-            <img src="logo.jpg" width="65" height="65">
+            <img src="https://raw.githubusercontent.com/D4rksit3/ServerWebPython/master/logo.jpg" width="65" height="65">
             </a></div></div></span>
             </footer>
             
@@ -237,10 +237,10 @@ class requestHandler(BaseHTTPRequestHandler):
 
             #os.system("start PsExec -i -accepteula /nobanner")
 
-            subprocess.run(f"start pskill64.exe \\\\{a} -u administrador -p @C0l0n14l# -nobanner iexplore.exe", shell=True) and subprocess.run(f"start pskill64.exe \\\\{a} -u administrador -p soporte@ -nobanner iexplore.exe",shell=True)
+            subprocess.run(f"start pskill64.exe \\\\{a} -u administrador -p @C0l0n14l# -accepteula -nobanner iexplore.exe", shell=True) and subprocess.run(f"start pskill64.exe \\\\{a} -u administrador -p soporte@ -accepteula -nobanner iexplore.exe",shell=True)
             #subprocess.run()
             time.sleep(5)
-            os.system(f"start psexec.exe -i \\\\{a} -u administrador -p @C0l0n14l# -c start.bat") and os.system(f"start psexec.exe -i \\\\{a} -u administrador -p soporte@ -c start.bat")
+            os.system(f"start psexec.exe -i \\\\{a} -accepteula -u administrador -p @C0l0n14l# -c start.bat") and os.system(f"start psexec.exe -i \\\\{a} -accepteula -u administrador -p soporte@ -c start.bat")
             
             #self.end_headers()
             
